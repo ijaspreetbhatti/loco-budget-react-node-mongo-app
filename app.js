@@ -17,7 +17,8 @@ mongoConnection
 
 app.use(express.static("public"));
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-const BudgetRoutes = require('./routes/BudgetRoutes.js');
+const Routes = require('./routes/Routes.js');
 
-app.use('/api/v1', BudgetRoutes);
+app.use('/api/v1', Routes);
