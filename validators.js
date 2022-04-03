@@ -31,9 +31,11 @@ const transactionValidator = (req, res, next) => {
                 enum: [
                     'entertainment',
                     'rent',
-                    'ultilities',
+                    'utilities',
                     'groceries',
-                    'misc'
+                    'misc',
+                    'salary',
+                    'income'
                 ],
                 errorMessage: {
                     enum: 'Invalid Transaction Category!',
@@ -45,7 +47,7 @@ const transactionValidator = (req, res, next) => {
                 default: 0.01,
                 errorMessage: {
                     minimum: 'Amount should be greater than 0.01',
-                    type: 'Amount should be a number.'
+                    type: 'Amount should be a Number.'
                 }
             },
             type: {
@@ -97,11 +99,100 @@ const transactionValidator = (req, res, next) => {
 
     validate(req.body);
 
-    res.locals.validationErrors = validate.errors?.map((err) => ({ message: err.message }));
+    res.locals.validationErrors = validate.errors?.map((err) => (err.message));
+
+    next();
+};
+
+const budgetValidator = (req, res, next) => {
+    let schema = {
+        type: 'object',
+        properties: {
+            entertainment: {
+                type: 'number',
+                minimum: 0,
+                default: 0,
+                errorMessage: {
+                    minimum: 'Entertainment Budget should be at least 0',
+                    type: 'Entertainment Budget should be a Number.'
+                }
+            },
+            rent: {
+                type: 'number',
+                minimum: 0,
+                default: 0,
+                errorMessage: {
+                    minimum: 'Rent Budget should be at least 0',
+                    type: 'Rent Budget should be a Number.'
+                }
+            },
+            utilities: {
+                type: 'number',
+                minimum: 0,
+                default: 0,
+                errorMessage: {
+                    minimum: 'Utilities Budget should be at least 0',
+                    type: 'Utilities Budget should be a Number.'
+                }
+            },
+            groceries: {
+                type: 'number',
+                minimum: 0,
+                default: 0,
+                errorMessage: {
+                    minimum: 'Groceries Budget should be at least 0',
+                    type: 'Groceries Budget should be a Number.'
+                }
+            },
+            misc: {
+                type: 'number',
+                minimum: 0,
+                default: 0,
+                errorMessage: {
+                    minimum: 'Misc Budget should be at least 0',
+                    type: 'Misc Budget should be a Number.'
+                }
+            },
+            income: {
+                type: 'number',
+                minimum: 0,
+                default: 0,
+                errorMessage: {
+                    minimum: 'Income should be at least 0',
+                    type: 'Income should be a Number.'
+                }
+            },
+        },
+        required: [
+            'entertainment',
+            'rent',
+            'utilities',
+            'groceries',
+            'misc',
+            'income',
+        ],
+        additionalProperties: true,
+        errorMessage: {
+            required: {
+                'name': 'Name is required!',
+                'category': 'Category is required!',
+                'amount': 'Amount is required!',
+                'type': 'Type is required!',
+                'date': 'Date is required!',
+            }
+        }
+    };
+
+    const validate = ajv.compile(schema);
+
+    validate(req.body);
+
+    res.locals.validationErrors = validate.errors?.map((err) => (err.message));
 
     next();
 };
 
 module.exports = {
-    transactionValidator
+    transactionValidator,
+    budgetValidator
 };

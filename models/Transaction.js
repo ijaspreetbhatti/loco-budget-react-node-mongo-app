@@ -4,9 +4,11 @@ const Schema = mongoose.Schema;
 const TransactionCategoryList = [
     'entertainment',
     'rent',
-    'ultilities',
+    'utilities',
     'groceries',
-    'misc'
+    'misc',
+    'salary',
+    'income'
 ];
 
 const TransactionSchema = new Schema({

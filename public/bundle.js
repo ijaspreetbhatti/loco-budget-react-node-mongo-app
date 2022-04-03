@@ -10062,28 +10062,54 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var _style_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./style.css */ "./src/style.css");
-/* harmony import */ var _Transactions__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Transactions */ "./src/Transactions.js");
-/* harmony import */ var _Loading__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Loading */ "./src/Loading.js");
-/* harmony import */ var _BudgetCreationDialog__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./BudgetCreationDialog */ "./src/BudgetCreationDialog.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _style_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./style.css */ "./src/style.css");
+/* harmony import */ var _Transactions__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Transactions */ "./src/Transactions.js");
+/* harmony import */ var _Loading__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Loading */ "./src/Loading.js");
+/* harmony import */ var _BudgetCreationDialog__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./BudgetCreationDialog */ "./src/BudgetCreationDialog.js");
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
 function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
 
 
 
 
 
+
+
+
+var reducer = function reducer(state, action) {
+  switch (action.type) {
+    case 'LOAD_LIST':
+      return action.payload;
+
+    case 'UPDATE_LIST':
+      return [].concat(_toConsumableArray(state.filter(function (transaction) {
+        return transaction._id != action.payload.transactionId;
+      })), [action.payload.newTransaction]);
+
+    default:
+      break;
+  }
+};
 
 var App = function App(props) {
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
@@ -10096,15 +10122,52 @@ var App = function App(props) {
       showLoading = _useState4[0],
       setLoading = _useState4[1];
 
+  var _useReducer = (0,react__WEBPACK_IMPORTED_MODULE_0__.useReducer)(reducer, []),
+      _useReducer2 = _slicedToArray(_useReducer, 2),
+      transactionList = _useReducer2[0],
+      dispatch = _useReducer2[1];
+
+  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(10),
+      _useState6 = _slicedToArray(_useState5, 2),
+      totalTransactions = _useState6[0],
+      setTotalTransactions = _useState6[1];
+
+  var getTransactions = function getTransactions(count, page) {
+    setLoading(true);
+    axios__WEBPACK_IMPORTED_MODULE_1___default().get("/api/v1/transaction?count=".concat(count, "&page=").concat(page)).then(function (result) {
+      setLoading(false);
+      setTotalTransactions(result.data.totalTransactions);
+      dispatch({
+        type: 'LOAD_LIST',
+        payload: result.data.list
+      });
+    })["catch"](function (err) {
+      console.log(err);
+    });
+  };
+
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function loadList() {
+    getTransactions(10, 0);
+  }, []);
+
   var handleBudgetClick = function handleBudgetClick(e) {
     setShowBudgetDialog(!showBudgetDialog);
   };
 
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("header", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("h1", null, "Loco Budget"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", {
     onClick: function onClick(e) {
+      return handleTransactionClick(e);
+    }
+  }, "Add New Transaction"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", {
+    onClick: function onClick(e) {
       return handleBudgetClick(e);
     }
-  }, "Manage Budget")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_Transactions__WEBPACK_IMPORTED_MODULE_2__["default"], null), showBudgetDialog ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_BudgetCreationDialog__WEBPACK_IMPORTED_MODULE_4__["default"], null) : null, showLoading ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_Loading__WEBPACK_IMPORTED_MODULE_3__["default"], null) : null);
+  }, "Manage Budget")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_Transactions__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    setLoading: setLoading,
+    loadList: getTransactions,
+    transactionList: transactionList,
+    totalTransactions: totalTransactions
+  }), showBudgetDialog ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_BudgetCreationDialog__WEBPACK_IMPORTED_MODULE_5__["default"], null) : null, showLoading ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_Loading__WEBPACK_IMPORTED_MODULE_4__["default"], null) : null);
 };
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (App);
@@ -10172,70 +10235,100 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
 function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
-
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
 
-
-
-
-var reducer = function reducer(state, action) {
-  switch (action.type) {
-    case 'LOAD_LIST':
-      return action.payload;
-
-    case 'UPDATE_LIST':
-      return [].concat(_toConsumableArray(state.filter(function (transaction) {
-        return transaction._id != action.payload.transactionId;
-      })), [action.payload.newTransaction]);
-
-    default:
-      break;
-  }
-};
 
 var Transactions = function Transactions(props) {
-  var _useReducer = (0,react__WEBPACK_IMPORTED_MODULE_0__.useReducer)(reducer, []),
-      _useReducer2 = _slicedToArray(_useReducer, 2),
-      transactionList = _useReducer2[0],
-      dispatch = _useReducer2[1];
+  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(0),
+      _useState2 = _slicedToArray(_useState, 2),
+      page = _useState2[0],
+      setPage = _useState2[1];
 
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function loadList() {
-    axios__WEBPACK_IMPORTED_MODULE_1___default().get("/api/v1/transaction?count=10&page=0").then(function (result) {
-      dispatch({
-        type: 'LOAD_LIST',
-        payload: result.data
-      });
-    })["catch"](function (err) {
-      console.log(err);
-    });
+  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(10),
+      _useState4 = _slicedToArray(_useState3, 2),
+      count = _useState4[0],
+      setCount = _useState4[1];
+
+  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),
+      _useState6 = _slicedToArray(_useState5, 2),
+      pageOptions = _useState6[0],
+      setPageOptions = _useState6[1];
+
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function init() {
+    calculatePageOptions();
   }, []);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function handlePropChange() {
+    calculatePageOptions();
+  }, [props, count]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function handleListChange() {
+    props.loadList(count, page);
+  }, [count, page]);
+
+  var calculatePageOptions = function calculatePageOptions() {
+    var options = [];
+
+    for (var i = 0; i < Math.ceil(props.totalTransactions / count); i++) {
+      options.push( /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("option", {
+        key: i,
+        value: i
+      }, i + 1));
+    }
+
+    setPageOptions(options);
+  };
+
+  var handleCountChange = function handleCountChange(e) {
+    setCount(Number(e.target.value));
+    setPage(0);
+  };
+
+  var handlePageChange = function handlePageChange(e) {
+    setPage(Number(e.target.value));
+  };
+
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
     className: "transactions"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("table", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("thead", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("th", null, "Name"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("th", null, "Date"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("th", null, "Category"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("th", null, "Type"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("th", null, "Amount"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("tbody", null, transactionList.map(function (transaction) {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("table", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("thead", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("th", null, "Name"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("th", null, "Date"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("th", null, "Category"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("th", null, "Type"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("th", null, "Amount"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("tbody", null, props.transactionList.map(function (transaction) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", {
       key: transaction._id
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, transaction.name), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, transaction.date), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, transaction.category), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, transaction.type), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, transaction.amount));
-  })))));
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, transaction.name), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, new Date(transaction.date).toDateString()), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, transaction.category), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, transaction.type === 'income' ? "Credit" : "Debit"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("td", null, "$", transaction.amount));
+  }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+    className: "pagination"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("label", null, "Count:", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("select", {
+    value: count,
+    onChange: function onChange(e) {
+      return handleCountChange(e);
+    }
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("option", {
+    value: "5"
+  }, "5"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("option", {
+    value: "10"
+  }, "10"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("option", {
+    value: "15"
+  }, "15"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("option", {
+    value: "20"
+  }, "20"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("option", {
+    value: "30"
+  }, "30"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("option", {
+    value: "50"
+  }, "50"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("label", null, "Page:", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("select", {
+    value: page,
+    onChange: function onChange(e) {
+      return handlePageChange(e);
+    }
+  }, pageOptions)))));
 };
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Transactions);
@@ -10262,7 +10355,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "html,\nbody {\n    margin: 0;\n    padding: 0;\n    box-sizing: border-box;\n    height: 100%;\n}\n\nh1,\nh2,\nh3,\nh4,\nh5,\nh6 {\n    margin: 0;\n    font-family: \"Playfair Display\";\n}\n\nbody {\n    font-family: Lato;\n}\n\nheader {\n    display: flex;\n    flex-direction: row;\n    justify-content: space-between;\n}\n\n.react-container {\n    position: relative;\n    height: 100%;\n    padding: 1rem;\n}\n\n.loading {\n    height: 100%;\n    width: 100%;\n    top: 0;\n    left: 0;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    background-color: #00000022;\n    position: absolute;\n    font-size: 1.5rem;\n    z-index: 10;\n}\n\n.budget-creation-dialog {\n    height: 100%;\n    width: 100%;\n    top: 0;\n    left: 0;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    background-color: #00000022;\n    position: absolute;\n    font-size: 1.5rem;\n    z-index: 2;\n}\n\n.transactions table {\n    margin-top: 40px;\n    width: 100%;\n}\n\n.transactions table tr th,\n.transactions table tr td {\n}\n", "",{"version":3,"sources":["webpack://./src/style.css"],"names":[],"mappings":"AAAA;;IAEI,SAAS;IACT,UAAU;IACV,sBAAsB;IACtB,YAAY;AAChB;;AAEA;;;;;;IAMI,SAAS;IACT,+BAA+B;AACnC;;AAEA;IACI,iBAAiB;AACrB;;AAEA;IACI,aAAa;IACb,mBAAmB;IACnB,8BAA8B;AAClC;;AAEA;IACI,kBAAkB;IAClB,YAAY;IACZ,aAAa;AACjB;;AAEA;IACI,YAAY;IACZ,WAAW;IACX,MAAM;IACN,OAAO;IACP,aAAa;IACb,mBAAmB;IACnB,uBAAuB;IACvB,2BAA2B;IAC3B,kBAAkB;IAClB,iBAAiB;IACjB,WAAW;AACf;;AAEA;IACI,YAAY;IACZ,WAAW;IACX,MAAM;IACN,OAAO;IACP,aAAa;IACb,mBAAmB;IACnB,uBAAuB;IACvB,2BAA2B;IAC3B,kBAAkB;IAClB,iBAAiB;IACjB,UAAU;AACd;;AAEA;IACI,gBAAgB;IAChB,WAAW;AACf;;AAEA;;AAEA","sourcesContent":["html,\nbody {\n    margin: 0;\n    padding: 0;\n    box-sizing: border-box;\n    height: 100%;\n}\n\nh1,\nh2,\nh3,\nh4,\nh5,\nh6 {\n    margin: 0;\n    font-family: \"Playfair Display\";\n}\n\nbody {\n    font-family: Lato;\n}\n\nheader {\n    display: flex;\n    flex-direction: row;\n    justify-content: space-between;\n}\n\n.react-container {\n    position: relative;\n    height: 100%;\n    padding: 1rem;\n}\n\n.loading {\n    height: 100%;\n    width: 100%;\n    top: 0;\n    left: 0;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    background-color: #00000022;\n    position: absolute;\n    font-size: 1.5rem;\n    z-index: 10;\n}\n\n.budget-creation-dialog {\n    height: 100%;\n    width: 100%;\n    top: 0;\n    left: 0;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    background-color: #00000022;\n    position: absolute;\n    font-size: 1.5rem;\n    z-index: 2;\n}\n\n.transactions table {\n    margin-top: 40px;\n    width: 100%;\n}\n\n.transactions table tr th,\n.transactions table tr td {\n}\n"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, "html,\nbody {\n    margin: 0;\n    padding: 0;\n    box-sizing: border-box;\n    height: 100%;\n}\n\nh1,\nh2,\nh3,\nh4,\nh5,\nh6 {\n    margin: 0;\n    font-family: \"Playfair Display\";\n}\n\nbody {\n    font-family: Lato;\n}\n\nheader {\n    display: flex;\n    flex-direction: row;\n    justify-content: space-between;\n    padding-bottom: 3rem;\n    gap: 1rem;\n}\n\nheader h1 {\n    flex: 80;\n}\n\nbutton {\n    border-radius: 1rem;\n    background-color: #000000;\n    color: #ffffff;\n    border: none;\n    font-size: 1rem;\n    padding: 1rem 2rem;\n}\n\n.react-container {\n    position: relative;\n    height: 100%;\n    padding: 1rem;\n}\n\n.loading {\n    height: 100%;\n    width: 100%;\n    top: 0;\n    left: 0;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    background-color: #00000022;\n    position: absolute;\n    font-size: 1.5rem;\n    z-index: 10;\n}\n\n.budget-creation-dialog {\n    height: 100%;\n    width: 100%;\n    top: 0;\n    left: 0;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    background-color: #00000022;\n    position: absolute;\n    font-size: 1.5rem;\n    z-index: 2;\n}\n\n.transactions {\n    display: flex;\n    flex-direction: column;\n    gap: 1rem;\n    font-size: 1.15rem;\n}\n\n.transactions table {\n    width: 100%;\n    border-collapse: collapse;\n}\n\n.transactions table thead tr {\n    background-color: #000000;\n    color: white;\n    border-radius: 1rem;\n    overflow: hidden;\n}\n\n.transactions table tr:nth-child(even) {\n    background-color: #00000010;\n}\n\n.transactions table tr td {\n    text-align: left;\n    text-transform: capitalize;\n}\n\n.transactions table tr td:nth-child(5) {\n    text-align: right;\n}\n\n.transactions div {\n    display: flex;\n    justify-content: flex-end;\n    gap: 1rem;\n}\n", "",{"version":3,"sources":["webpack://./src/style.css"],"names":[],"mappings":"AAAA;;IAEI,SAAS;IACT,UAAU;IACV,sBAAsB;IACtB,YAAY;AAChB;;AAEA;;;;;;IAMI,SAAS;IACT,+BAA+B;AACnC;;AAEA;IACI,iBAAiB;AACrB;;AAEA;IACI,aAAa;IACb,mBAAmB;IACnB,8BAA8B;IAC9B,oBAAoB;IACpB,SAAS;AACb;;AAEA;IACI,QAAQ;AACZ;;AAEA;IACI,mBAAmB;IACnB,yBAAyB;IACzB,cAAc;IACd,YAAY;IACZ,eAAe;IACf,kBAAkB;AACtB;;AAEA;IACI,kBAAkB;IAClB,YAAY;IACZ,aAAa;AACjB;;AAEA;IACI,YAAY;IACZ,WAAW;IACX,MAAM;IACN,OAAO;IACP,aAAa;IACb,mBAAmB;IACnB,uBAAuB;IACvB,2BAA2B;IAC3B,kBAAkB;IAClB,iBAAiB;IACjB,WAAW;AACf;;AAEA;IACI,YAAY;IACZ,WAAW;IACX,MAAM;IACN,OAAO;IACP,aAAa;IACb,mBAAmB;IACnB,uBAAuB;IACvB,2BAA2B;IAC3B,kBAAkB;IAClB,iBAAiB;IACjB,UAAU;AACd;;AAEA;IACI,aAAa;IACb,sBAAsB;IACtB,SAAS;IACT,kBAAkB;AACtB;;AAEA;IACI,WAAW;IACX,yBAAyB;AAC7B;;AAEA;IACI,yBAAyB;IACzB,YAAY;IACZ,mBAAmB;IACnB,gBAAgB;AACpB;;AAEA;IACI,2BAA2B;AAC/B;;AAEA;IACI,gBAAgB;IAChB,0BAA0B;AAC9B;;AAEA;IACI,iBAAiB;AACrB;;AAEA;IACI,aAAa;IACb,yBAAyB;IACzB,SAAS;AACb","sourcesContent":["html,\nbody {\n    margin: 0;\n    padding: 0;\n    box-sizing: border-box;\n    height: 100%;\n}\n\nh1,\nh2,\nh3,\nh4,\nh5,\nh6 {\n    margin: 0;\n    font-family: \"Playfair Display\";\n}\n\nbody {\n    font-family: Lato;\n}\n\nheader {\n    display: flex;\n    flex-direction: row;\n    justify-content: space-between;\n    padding-bottom: 3rem;\n    gap: 1rem;\n}\n\nheader h1 {\n    flex: 80;\n}\n\nbutton {\n    border-radius: 1rem;\n    background-color: #000000;\n    color: #ffffff;\n    border: none;\n    font-size: 1rem;\n    padding: 1rem 2rem;\n}\n\n.react-container {\n    position: relative;\n    height: 100%;\n    padding: 1rem;\n}\n\n.loading {\n    height: 100%;\n    width: 100%;\n    top: 0;\n    left: 0;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    background-color: #00000022;\n    position: absolute;\n    font-size: 1.5rem;\n    z-index: 10;\n}\n\n.budget-creation-dialog {\n    height: 100%;\n    width: 100%;\n    top: 0;\n    left: 0;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    background-color: #00000022;\n    position: absolute;\n    font-size: 1.5rem;\n    z-index: 2;\n}\n\n.transactions {\n    display: flex;\n    flex-direction: column;\n    gap: 1rem;\n    font-size: 1.15rem;\n}\n\n.transactions table {\n    width: 100%;\n    border-collapse: collapse;\n}\n\n.transactions table thead tr {\n    background-color: #000000;\n    color: white;\n    border-radius: 1rem;\n    overflow: hidden;\n}\n\n.transactions table tr:nth-child(even) {\n    background-color: #00000010;\n}\n\n.transactions table tr td {\n    text-align: left;\n    text-transform: capitalize;\n}\n\n.transactions table tr td:nth-child(5) {\n    text-align: right;\n}\n\n.transactions div {\n    display: flex;\n    justify-content: flex-end;\n    gap: 1rem;\n}\n"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
