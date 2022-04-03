@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
+require('dotenv').config()
 
-let mongoDB = `mongodb+srv://teamloon:teamloon@cluster0.pm1me.mongodb.net/loco-budget?retryWrites=true&w=majority`;
+let mongoDB = process.env.MONGODB;
 
 module.exports = mongoose.connect(mongoDB);
