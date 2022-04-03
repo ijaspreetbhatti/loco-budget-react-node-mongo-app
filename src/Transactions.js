@@ -39,12 +39,12 @@ const Transactions = (props) => {
                     </thead>
                     <tbody>
                         {transactionList.map((transaction) => (
-                            <tr>
+                            <tr key={transaction._id}>
                                 <td>{transaction.name}</td>
-                                <td>{transaction.category}</td>
-                                <td>{transaction.amount}</td>
-                                <td>{transaction.type}</td>
                                 <td>{transaction.date}</td>
+                                <td>{transaction.category}</td>
+                                <td>{transaction.type}</td>
+                                <td>{transaction.amount}</td>
                             </tr>
                         ))}
                     </tbody>

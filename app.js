@@ -8,7 +8,7 @@ const mongoConnection = require("./connection.js");
 
 mongoConnection
     .then(() => {
-        console.log("Loco Buget MongoDB Connected!");
+        console.log("Loco Budget MongoDB Connected!");
         server = app.listen(
             process.env.PORT || 8080,
             () => console.log("Site is active on 8080. Visit http://localhost:8080/.")

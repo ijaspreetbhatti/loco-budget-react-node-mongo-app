@@ -15,20 +15,36 @@ const getTransaction = (req, res, next) => {
 }
 
 const createNewTransaction = (req, res) => {
-    let newTransaction = new Transaction(req.locals.transaction);
-    newTransaction.save()
-        .then((result) => {
-            const url = `/api/v1/transaction/${newTransaction._id}`;
-            res.set('content-location', url).status(201).json({
-                url,
-                data: newCharacter.toObject()
-            });
-        })
-        .catch((error) => res.status(500).send(error));
+    if (res.locals.validationErrors && res.locals.validationErrors.length > 0) {
+        res.status(422).json(res.locals.validationErrors);
+    } else {
+        let newTransaction = new Transaction(req.body);
+        newTransaction.save()
+            .then((result) => {
+                const url = `/api/v1/transaction/${newTransaction._id}`;
+                res.set('content-location', url).status(201).json({
+                    url,
+                    data: newCharacter.toObject()
+                });
+            })
+            .catch((error) => res.status(500).send(error));
+    }
 };
 
 const updateTransaction = (req, res) => {
-
+    if (res.locals.validationErrors && res.locals.validationErrors.length > 0) {
+        res.status(422).json(res.locals.validationErrors);
+    } else {
+        Transaction.updateOne({
+            _id: req.params.transactionId,
+        }, req.body, (err, r) => {
+            if (err) {
+                res.status(422).json(err);
+            } else {
+                res.status(200).json(r);
+            }
+        });
+    }
 };
 
 module.exports = {
