@@ -82,6 +82,23 @@ const Budget = (props) => {
         return ((selectedPeriodData[field] / selectedBudget[field]) * 100).toFixed(2);
     }
 
+    const getStyle = (field) => {
+        const per = getPercentage(field);
+        if (per > 100) {
+            return {
+                backgroundColor: '#ffa5a5'
+            }
+        } else if (per <= 100 && per >= 90) {
+            return {
+                backgroundColor: '#a7f3a7'
+            }
+        } else if (per < 90 && per >= 80) {
+            return {
+                backgroundColor: '#ffff78'
+            }
+        }
+    }
+
     useEffect(function () {
         loadBudgets(true);
         loadPeriodList();
@@ -158,37 +175,37 @@ const Budget = (props) => {
                                 <td>Income</td>
                                 <td>${selectedBudget.income}</td>
                                 <td>${selectedPeriodData.income}</td>
-                                <td>{selectedBudget.income == 0 ? '-' : getPercentage('income') + '%'}</td>
+                                <td style={getStyle('income')}>{selectedBudget.income == 0 ? '-' : getPercentage('income') + '%'}</td>
                             </tr>
                             <tr>
                                 <td>Entertainment</td>
                                 <td>${selectedBudget.entertainment}</td>
                                 <td>${selectedPeriodData.entertainment}</td>
-                                <td>{selectedBudget.entertainment == 0 ? '-' : getPercentage('entertainment') + '%'}</td>
+                                <td style={getStyle('entertainment')}>{selectedBudget.entertainment == 0 ? '-' : getPercentage('entertainment') + '%'}</td>
                             </tr>
                             <tr>
                                 <td>Rent</td>
                                 <td>${selectedBudget.rent}</td>
                                 <td>${selectedPeriodData.rent}</td>
-                                <td>{selectedBudget.rent == 0 ? '-' : getPercentage('rent') + '%'}</td>
+                                <td style={getStyle('rent')}>{selectedBudget.rent == 0 ? '-' : getPercentage('rent') + '%'}</td>
                             </tr>
                             <tr>
                                 <td>Utilities</td>
                                 <td>${selectedBudget.utilities}</td>
                                 <td>${selectedPeriodData.utilities}</td>
-                                <td>{selectedBudget.utilities == 0 ? '-' : getPercentage('utilities') + '%'}</td>
+                                <td style={getStyle('utilities')}>{selectedBudget.utilities == 0 ? '-' : getPercentage('utilities') + '%'}</td>
                             </tr>
                             <tr>
                                 <td>Groceries</td>
                                 <td>${selectedBudget.groceries}</td>
                                 <td>${selectedPeriodData.groceries}</td>
-                                <td>{selectedBudget.groceries == 0 ? '-' : getPercentage('groceries') + '%'}</td>
+                                <td style={getStyle('groceries')}>{selectedBudget.groceries == 0 ? '-' : getPercentage('groceries') + '%'}</td>
                             </tr>
                             <tr>
                                 <td>Misc</td>
                                 <td>${selectedBudget.misc}</td>
                                 <td>${selectedPeriodData.misc}</td>
-                                <td>{selectedBudget.misc == 0 ? '-' : getPercentage('misc') + '%'}</td>
+                                <td style={getStyle('misc')}>{selectedBudget.misc == 0 ? '-' : getPercentage('misc') + '%'}</td>
                             </tr>
                         </tbody>
                     </table>

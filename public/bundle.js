@@ -10404,6 +10404,24 @@ var Budget = function Budget(props) {
     return (selectedPeriodData[field] / selectedBudget[field] * 100).toFixed(2);
   };
 
+  var getStyle = function getStyle(field) {
+    var per = getPercentage(field);
+
+    if (per > 100) {
+      return {
+        backgroundColor: '#ffa5a5'
+      };
+    } else if (per <= 100 && per >= 90) {
+      return {
+        backgroundColor: '#a7f3a7'
+      };
+    } else if (per < 90 && per >= 80) {
+      return {
+        backgroundColor: '#ffff78'
+      };
+    }
+  };
+
   (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
     loadBudgets(true);
     loadPeriodList();
@@ -10479,7 +10497,19 @@ var Budget = function Budget(props) {
     onClick: function onClick(e) {
       return handleEditBudget(e);
     }
-  }, "Edit"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("table", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("tbody", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("th", null, "Category"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("th", null, "Budget"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("th", null, "Used"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("th", null, "%age")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("td", null, "Income"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("td", null, "$", selectedBudget.income), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("td", null, "$", selectedPeriodData.income), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("td", null, selectedBudget.income == 0 ? '-' : getPercentage('income') + '%')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("td", null, "Entertainment"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("td", null, "$", selectedBudget.entertainment), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("td", null, "$", selectedPeriodData.entertainment), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("td", null, selectedBudget.entertainment == 0 ? '-' : getPercentage('entertainment') + '%')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("td", null, "Rent"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("td", null, "$", selectedBudget.rent), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("td", null, "$", selectedPeriodData.rent), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("td", null, selectedBudget.rent == 0 ? '-' : getPercentage('rent') + '%')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("td", null, "Utilities"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("td", null, "$", selectedBudget.utilities), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("td", null, "$", selectedPeriodData.utilities), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("td", null, selectedBudget.utilities == 0 ? '-' : getPercentage('utilities') + '%')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("td", null, "Groceries"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("td", null, "$", selectedBudget.groceries), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("td", null, "$", selectedPeriodData.groceries), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("td", null, selectedBudget.groceries == 0 ? '-' : getPercentage('groceries') + '%')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("td", null, "Misc"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("td", null, "$", selectedBudget.misc), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("td", null, "$", selectedPeriodData.misc), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("td", null, selectedBudget.misc == 0 ? '-' : getPercentage('misc') + '%')))))), showBudgetDialog ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement(_BudgetDialog__WEBPACK_IMPORTED_MODULE_2__["default"], {
+  }, "Edit"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("table", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("tbody", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("th", null, "Category"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("th", null, "Budget"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("th", null, "Used"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("th", null, "%age")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("td", null, "Income"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("td", null, "$", selectedBudget.income), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("td", null, "$", selectedPeriodData.income), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("td", {
+    style: getStyle('income')
+  }, selectedBudget.income == 0 ? '-' : getPercentage('income') + '%')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("td", null, "Entertainment"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("td", null, "$", selectedBudget.entertainment), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("td", null, "$", selectedPeriodData.entertainment), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("td", {
+    style: getStyle('entertainment')
+  }, selectedBudget.entertainment == 0 ? '-' : getPercentage('entertainment') + '%')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("td", null, "Rent"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("td", null, "$", selectedBudget.rent), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("td", null, "$", selectedPeriodData.rent), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("td", {
+    style: getStyle('rent')
+  }, selectedBudget.rent == 0 ? '-' : getPercentage('rent') + '%')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("td", null, "Utilities"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("td", null, "$", selectedBudget.utilities), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("td", null, "$", selectedPeriodData.utilities), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("td", {
+    style: getStyle('utilities')
+  }, selectedBudget.utilities == 0 ? '-' : getPercentage('utilities') + '%')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("td", null, "Groceries"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("td", null, "$", selectedBudget.groceries), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("td", null, "$", selectedPeriodData.groceries), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("td", {
+    style: getStyle('groceries')
+  }, selectedBudget.groceries == 0 ? '-' : getPercentage('groceries') + '%')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("td", null, "Misc"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("td", null, "$", selectedBudget.misc), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("td", null, "$", selectedPeriodData.misc), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement("td", {
+    style: getStyle('misc')
+  }, selectedBudget.misc == 0 ? '-' : getPercentage('misc') + '%')))))), showBudgetDialog ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1__.createElement(_BudgetDialog__WEBPACK_IMPORTED_MODULE_2__["default"], {
     close: handleBudgetClose,
     budget: selectedBudget,
     showDeleteButton: true
