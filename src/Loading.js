@@ -4,7 +4,7 @@ const Loading = (props) => {
 
     return (
         <>
-            <div className="loading">
+            <div className="dialog loading">
                 Loading...
             </div>
         </>

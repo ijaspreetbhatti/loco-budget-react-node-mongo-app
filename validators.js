@@ -108,6 +108,14 @@ const budgetValidator = (req, res, next) => {
     let schema = {
         type: 'object',
         properties: {
+            name: {
+                type: 'string',
+                maxLength: 40,
+                errorMessage: {
+                    maxLength: 'Name can not be longer than 40 characters!',
+                    type: 'Name should be a string!'
+                }
+            },
             entertainment: {
                 type: 'number',
                 minimum: 0,
@@ -164,6 +172,7 @@ const budgetValidator = (req, res, next) => {
             },
         },
         required: [
+            'name',
             'entertainment',
             'rent',
             'utilities',
@@ -175,10 +184,12 @@ const budgetValidator = (req, res, next) => {
         errorMessage: {
             required: {
                 'name': 'Name is required!',
-                'category': 'Category is required!',
-                'amount': 'Amount is required!',
-                'type': 'Type is required!',
-                'date': 'Date is required!',
+                'entertainment': 'Entertainment is required!',
+                'rent': 'Rent is required!',
+                'utilities': 'Utilities is required!',
+                'groceries': 'Groceries is required!',
+                'misc': 'Misc is required!',
+                'income': 'Income is required!',
             }
         }
     };

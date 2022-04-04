@@ -79,10 +79,31 @@ const deleteTransaction = (req, res) => {
     });
 };
 
+const getTransactionsAggregateForMonth = (req, res) => {
+    Transaction
+        .aggregate(
+            [
+                {
+                    $match: {
+                        date: {
+                            $gte: new Date(req.params.year, req.params.month - 1, 01),
+                            $lt: new Date(req.params.year, Number(req.params.month), 01)
+                        }
+                    }
+                },
+                { $group: { _id: "$category", total: { $sum: "$amount" } } }
+            ]).exec()
+        .then(result => {
+            res.json(result)
+        })
+        .catch((error) => res.status(500).send(error));
+}
+
 module.exports = {
     getAllTransactions,
     getTransaction,
     createNewTransaction,
     updateTransaction,
-    deleteTransaction
+    deleteTransaction,
+    getTransactionsAggregateForMonth
 };
