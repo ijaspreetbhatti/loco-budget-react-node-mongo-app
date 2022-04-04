@@ -1,7 +1,3 @@
 /node_modules
 
-public/bundle.js.map
-
-public/bundle.js
-
 .env
