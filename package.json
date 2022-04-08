@@ -1,17 +1,16 @@
 {
   "name": "project-jaspreet-bhatti",
   "version": "1.0.0",
-  "description": "",
+  "description": "This is personal budget maker. In this you can add transactions and create different budgets you would want to apply to a particular period (Month of a year).",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon app.js",
     "watch": "webpack --watch",
     "build": "webpack",
     "start": "node app.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "Jaspreet Bhatti",
   "license": "ISC",
   "dependencies": {
     "@babel/core": "^7.17.8",
